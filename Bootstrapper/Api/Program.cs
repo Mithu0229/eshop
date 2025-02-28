@@ -1,6 +1,4 @@
-using Basket;
-using Catalog;
-using Ordering;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //services
@@ -10,8 +8,21 @@ builder.Services.AddBasketModule(builder.Configuration);
 builder.Services.AddOrderingModule(builder.Configuration);
 var app = builder.Build();
 
-//
+//Configuration
+//app.UseStaticFiles();
+//app.UseRouting();
+//app.UseAuthentication();
+//app.UseAuthorization();
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllers();
+//});
 
-app.MapGet("/", () => "Hello World!");
+app.UseCatalogModule()
+    .UseBasketModule()
+    .UseOrderingModule();
+
+
+//app.MapGet("/", () => "Hello World!");
 
 app.Run();
