@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Catalog.Data.Seed;
 using Shared.Data.Seed;
+using Shared.Data.Interceptors;
+using Microsoft.Extensions.Options;
 namespace Catalog
 {
     public static class CatalogModule
@@ -13,9 +15,17 @@ namespace Catalog
         {
 
             // Data - Infrastructure services
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
-            services.AddDbContext<CatalogDbContext>(option =>
-            option.UseSqlServer(configuration.GetConnectionString("Database")));
+
+
+            services.AddDbContext<CatalogDbContext>((sp,option) =>
+            {
+
+                option.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                option.UseSqlServer(configuration.GetConnectionString("Database"));
+            });
             //var connectionString = configuration.GetConnectionString("Database");
             //services.AddDbContext<CatalogDbContext>((sp, options) =>
             //{
