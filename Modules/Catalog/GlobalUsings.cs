@@ -6,3 +6,7 @@ global using System.Reflection;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Catalog.Data;
 global using Shared.Data;
+global using Catalog.Products.Dtos;
+global using Shared.CQRS;
+global using Mapster;
+
