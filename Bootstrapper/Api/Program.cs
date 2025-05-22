@@ -1,12 +1,19 @@
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 //services
 
-builder.Services.AddCatalogModule(builder.Configuration);
-builder.Services.AddBasketModule(builder.Configuration);
-builder.Services.AddOrderingModule(builder.Configuration);
+builder.Services
+    .AddCarterWithAssemblies(typeof(CatalogModule).Assembly);
+
+builder.Services
+    .AddCatalogModule(builder.Configuration)
+    .AddBasketModule(builder.Configuration)
+    .AddOrderingModule(builder.Configuration); 
+
 var app = builder.Build();
+app.MapCarter();
 
 //Configuration
 //app.UseStaticFiles();

@@ -1,18 +1,22 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 using Catalog.Data.Seed;
 using Shared.Data.Seed;
 using Shared.Data.Interceptors;
-using Microsoft.Extensions.Options;
+
 namespace Catalog
 {
     public static class CatalogModule
     {
         public static IServiceCollection AddCatalogModule(this IServiceCollection services, IConfiguration configuration)
         {
+
+            // Application Use Case services
+            services.AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            });
 
             // Data - Infrastructure services
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
