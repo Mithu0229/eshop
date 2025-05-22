@@ -1,9 +1,4 @@
-﻿using Catalog.Products.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
 namespace Catalog.Products.Features.UpdateProduct
 {
@@ -11,6 +6,16 @@ namespace Catalog.Products.Features.UpdateProduct
      : ICommand<UpdateProductResult>;
 
     public record UpdateProductResult(bool IsSuccess);
+
+    public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+    {
+        public UpdateProductCommandValidator()
+        {
+            RuleFor(x => x.Product.Id).NotEmpty().WithMessage("Id is required");
+            RuleFor(x => x.Product.Name).NotEmpty().WithMessage("Name is required");
+            RuleFor(x => x.Product.Price).GreaterThan(0).WithMessage("Price must be greater than 0");
+        }
+    }
 
     internal class UpdateProductHandler(CatalogDbContext dbContext)
         : ICommandHandler<UpdateProductCommand, UpdateProductResult>

@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Catalog.Data.Seed;
 using Shared.Data.Seed;
 using Shared.Data.Interceptors;
+using Shared.Behaviors;
 
 namespace Catalog
 {
@@ -16,7 +17,11 @@ namespace Catalog
             services.AddMediatR(config =>
             {
                 config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+                config.AddOpenBehavior(typeof(LoggingBehavior<,>));
             });
+
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             // Data - Infrastructure services
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();

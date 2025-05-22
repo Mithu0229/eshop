@@ -25,7 +25,7 @@ namespace Catalog.Products.Features.GetProductById
 
             if (product is null)
             {
-                throw new Exception($"Product not found: {query.Id}");
+                throw new ProductNotFoundException(query.Id);
             }
 
             //mapping product entity to productdto
