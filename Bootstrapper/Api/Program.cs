@@ -4,13 +4,23 @@ using Shared.Exceptions.Handler;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 //services
 builder.Host.UseSerilog((context, config) =>
     config.ReadFrom.Configuration(context.Configuration));
 
 
+//common services: carter, mediatr, fluentvalidation
+var catalogAssembly = typeof(CatalogModule).Assembly;
+var basketAssembly = typeof(BasketModule).Assembly;
+
 builder.Services
-    .AddCarterWithAssemblies(typeof(CatalogModule).Assembly);
+    .AddCarterWithAssemblies(catalogAssembly, basketAssembly);
+
+builder.Services
+    .AddMediatRWithAssemblies(catalogAssembly, basketAssembly);
+
+//module services: catalog, basket, ordering
 
 builder.Services
     .AddCatalogModule(builder.Configuration)
