@@ -14,6 +14,9 @@ namespace Basket
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
             services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
+            services.AddScoped<IBasketRepository, BasketRepository>();
+            services.Decorate<IBasketRepository, CachedBasketRepository>();
+
             services.AddDbContext<BasketDbContext>((sp, option) =>
             {
 
