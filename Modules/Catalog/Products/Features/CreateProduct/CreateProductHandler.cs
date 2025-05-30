@@ -1,6 +1,5 @@
-﻿using Catalog.Products.Dtos;
-using FluentValidation;
-using Shared.CQRS;
+﻿using FluentValidation;
+using Shared.Contracts.CQRS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Catalog.Products.Features.CreateProduct
 {
-    public record CreateProductCommand(ProductDto Product)
+    public record CreateProductCommand(Contracts.Products.Dtos.ProductDto Product)
      : ICommand<CreateProductResult>;
 
     public record CreateProductResult(Guid Id);

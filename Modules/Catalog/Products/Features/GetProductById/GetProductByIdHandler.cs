@@ -1,15 +1,8 @@
-﻿using Catalog.Products.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Catalog.Products.Features.GetProductById
+﻿namespace Catalog.Products.Features.GetProductById
 {
-    public record GetProductByIdQuery(Guid Id)
-     : IQuery<GetProductByIdResult>;
-    public record GetProductByIdResult(ProductDto Product);
+    //public record GetProductByIdQuery(Guid Id)
+    // : IQuery<GetProductByIdResult>;
+    //public record GetProductByIdResult(ProductDto Product);
 
     internal class GetProductByIdHandler(CatalogDbContext dbContext)
         : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
@@ -29,7 +22,7 @@ namespace Catalog.Products.Features.GetProductById
             }
 
             //mapping product entity to productdto
-            var productDto = product.Adapt<ProductDto>();
+            var productDto = product.Adapt<Contracts.Products.Dtos.ProductDto>();
 
             return new GetProductByIdResult(productDto);
         }

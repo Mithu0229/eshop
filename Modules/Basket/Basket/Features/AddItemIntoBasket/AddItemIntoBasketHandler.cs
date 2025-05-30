@@ -1,4 +1,4 @@
-﻿
+﻿using Catalog.Contracts.Products.Features.GetProductById;
 
 namespace Basket.Basket.Features.AddItemIntoBasket
 {
@@ -15,12 +15,18 @@ namespace Basket.Basket.Features.AddItemIntoBasket
         }
     }
 
-    internal class AddItemIntoBasketHandler(IBasketRepository repository)
+    internal class AddItemIntoBasketHandler
+     (IBasketRepository repository, ISender sender)
         : ICommandHandler<AddItemIntoBasketCommand, AddItemIntoBasketResult>
     {
         public async Task<AddItemIntoBasketResult> Handle(AddItemIntoBasketCommand command, CancellationToken cancellationToken)
         {
             // Add shopping cart item into shopping cart
+            //TODO: Before AddItem into SC, we should call Catalog Module GetProductById methodAdd commentMore actions
+            // Get latest product information and set Price and ProductName when adding item into SC
+
+            var result = await sender.Send(
+                new GetProductByIdQuery(command.ShoppingCartItem.ProductId));
 
             var shoppingCart = await repository.GetBasket(command.UserName, false, cancellationToken);
 
@@ -28,8 +34,10 @@ namespace Basket.Basket.Features.AddItemIntoBasket
                     command.ShoppingCartItem.ProductId,
                     command.ShoppingCartItem.Quantity,
                     command.ShoppingCartItem.Color,
-                    command.ShoppingCartItem.Price,
-                    command.ShoppingCartItem.ProductName);
+                    result.Product.Price, 
+                    result.Product.Name);
+            //command.ShoppingCartItem.Price,
+            //command.ShoppingCartItem.ProductName);
 
             await repository.SaveChangesAsync(command.UserName, cancellationToken);
 
